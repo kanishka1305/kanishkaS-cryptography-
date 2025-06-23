@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+long gcd(long a, long b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+long modexp(long base, long exp, long mod) {
+    long result = 1;
+    base = base % mod;
+    while (exp > 0) {
+        if (exp % 2 == 1) result = (result * base) % mod;
+        exp >>= 1;
+        base = (base * base) % mod;
+    }
+    return result;
+}
+
+int main() {
+    long p, q, n, phi, e, d, k, message;
+    printf("Enter two prime numbers: ");
+    scanf("%ld%ld", &p, &q);
+    n = p * q;
+    phi = (p-1) * (q-1);
+    e = 2;
+    while (gcd(e, phi) != 1) e++;
+    for (k = 1; k < phi; k++) if ((k * e) % phi == 1) { d = k; break; }
+    printf("Enter message (as number): ");
+    scanf("%ld", &message);
+    long ciphertext = modexp(message, e, n);
+    long decrypted = modexp(ciphertext, d, n);
+    printf("Public key (e,n): (%ld,%ld)\n", e, n);
+    printf("Private key (d,n): (%ld,%ld)\n", d, n);
+    printf("Ciphertext: %ld\n", ciphertext);
+    printf("Decrypted: %ld\n", decrypted);
+    return 0;
+}
+input:
+Enter two prime numbers: 61 53
+Enter message (as number): 5
+output:
+Public key (e,n): (7,3233)
+Private key (d,n): (1783,3233)
+Ciphertext: 533
+Decrypted: 5
