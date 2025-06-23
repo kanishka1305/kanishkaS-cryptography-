@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+long power(long base, long exp, long mod) {
+    long result = 1;
+    base = base % mod;
+    while (exp > 0) {
+        if (exp % 2 == 1) result = (result * base) % mod;
+        exp >>= 1;
+        base = (base * base) % mod;
+    }
+    return result;
+}
+
+int main() {
+    long p, g, a, b;
+    printf("Enter prime number (p): ");
+    scanf("%ld", &p);
+    printf("Enter primitive root (g): ");
+    scanf("%ld", &g);
+    printf("Enter private key of Alice (a): ");
+    scanf("%ld", &a);
+    printf("Enter private key of Bob (b): ");
+    scanf("%ld", &b);
+    long A = power(g, a, p);
+    long B = power(g, b, p);
+    long secretA = power(B, a, p);
+    long secretB = power(A, b, p);
+    printf("Public key of Alice (A): %ld\n", A);
+    printf("Public key of Bob (B): %ld\n", B);
+    printf("Shared secret (Alice): %ld\n", secretA);
+    printf("Shared secret (Bob): %ld\n", secretB);
+    return 0;
+}
+INPUT:
+Enter prime number (p): 23 9
+Enter primitive root (g): Enter private key of Alice (a): 4
+Enter private key of Bob (b): 3
+OUTPUT:
+Public key of Alice (A): 6
+Public key of Bob (B): 16
+Shared secret (Alice): 9
+Shared secret (Bob): 9
